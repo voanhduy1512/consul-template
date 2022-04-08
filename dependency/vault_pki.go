@@ -83,7 +83,10 @@ func (d *VaultPKIQuery) Fetch(clients *ClientSet, opts *QueryOptions,
 
 	if sleepFor, ok := goodFor(cert); ok {
 		d.sleepCh <- sleepFor
-		return respWithMetadata(string(pem.EncodeToMemory(block)))
+		return string(pem.EncodeToMemory(block)), &ResponseMetadata{
+			LastContact: 0,
+			LastIndex:   0,
+		}, nil
 	}
 	d.pemBlock = nil
 	return "", &ResponseMetadata{
